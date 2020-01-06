@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.dao.LendDao">
+
+    <resultMap id="bookLendMap" type="com.library.bean.Lend">
+        <id column="ser_num" property="ser_num"/>
+        <result column="bookId" property="book_id"/>
+        <result column="lend_date" property="lend_date"/>
+        <result column="back_date" property="back_date"/>
+
+        <association property="book" javaType="com.library.bean.Book">
+            <id column="bookId" property="book_id"/>
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="bookLendAll" type="com.library.bean.Lend">
+        <id column="ser_num" property="ser_num"/>
+        <result column="ldate" property="lend_date"/>
+        <result column="bdate" property="back_date"/>
+
+        <association property="book" javaType="com.library.bean.Book">
+            <id column="book_id" property="book_id"/>
+            <result column="bname" property="name"/>
+        </association>
+
+        <association property="readerCard" javaType="com.library.bean.ReaderCard">
+            <result column="rusername" property="username"/>
+        </association>
+    </resultMap>
+
+    <select id="lendList" resultMap="bookLendAll">
+        select
+            ser_num,
+            bi.name bname,
+            rc.username rusername,
+            ll.lend_date ldate,
+            ll.back_date bdate
+        from lend_list ll, reader_card rc, book_info bi
+        where ll.reader_id = rc.reader_id and bi.book_id = ll.book_id
+    </select>
+
+
+    <update id="returnBookOne">
+        update lend_list
+        set back_date = sysdate()
+        where book_id = #{book_id}
+              and reader_id = #{reader_id} and back_date is null
+    </update>
+    <update id="returnBookTwo" parameterType="long">
+        update book_info
+        set number = number + 1
+        where book_id = #{book_id}
+    </update>
+    <insert id="lendBookOne">
+        insert into lend_list values
+            (null, #{book_id}, #{reader_id}, sysdate(), null)
+    </insert>
+    <update id="lendBookTwo" parameterType="long">
+        update book_info
+        set number = number - 1
+        where book_id = #{book_id}
+    </update>
+
+
+    <!--<select id="lendList" resultType="com.library.bean.Lend">-->
+    <!--select * from lend_list-->
+    <!--</select>-->
+
+    <!--<select id="myLendList" resultType="com.library.bean.Lend" parameterType="long">-->
+    <!--select * from lend_list where reader_id = #{reader_id}-->
+    <!--</select>-->
+    <select id="myLendList" resultMap="bookLendMap" parameterType="long">
+        select
+            ll.book_id bookId,
+            name,
+            lend_date,
+            back_date
+        from book_info bi, lend_list ll
+        where bi.book_id = ll.book_id and ll.reader_id = #{reader_id}
+    </select>
+
+    <delete id="deleteLend" parameterType="long">
+        delete from lend_list
+        where ser_num = #{ser_num}
+    </delete>
+    <delete id="deleteLendByBookId" parameterType="long">
+        delete from lend_list
+        where book_id = #{bookId}
+    </delete>
+
+
+
+    <!--<select id="mylend_bookName" parameterType="long" resultType="java.lang.String">-->
+    <!--select name from book_info bi ,lend_list ll where bi.book_id=ll.book_id and ll.reader_id=#{reader_id};-->
+    <!--</select>-->
+</mapper>

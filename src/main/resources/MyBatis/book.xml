@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.library.dao.BookDao">
+
+    <resultMap id="book_detail" type="com.library.bean.Book">
+        <id column="book_id" property="book_id"/>
+        <result column="name" property="name"/>
+        <result column="author" property="author"/>
+        <result column="publish" property="publish"/>
+        <result column="ISBN" property="ISBN"/>
+        <result column="introduction" property="introduction"/>
+        <result column="language" property="language"/>
+        <result column="price" property="price"/>
+        <result column="pub_date" property="pub_date"/>
+        <result column="number" property="number"/>
+        <association property="classInfo" javaType="com.library.bean.ClassInfo">
+            <result column="class_name" property="class_name"/>
+        </association>
+    </resultMap>
+
+
+    <insert id="addBook" parameterType="com.library.bean.Book">
+        insert into book_info values
+        (null, #{name}, #{author}, #{publish}, #{ISBN},
+        #{introduction}, #{language}, #{price}, #{pub_date},
+        #{class_id}, #{number})
+    </insert>
+    <update id="editBook" parameterType="com.library.bean.Book">
+        update book_info set name=#{name}, author=#{author},
+        publish=#{publish}, ISBN=#{ISBN}, introduction=#{introduction},
+        language=#{language}, price=#{price}, pub_date=#{pub_date},
+        class_id=#{class_id}, number=#{number} where book_id=#{book_id}
+    </update>
+
+    <select id="getAllBooks" resultType="com.library.bean.Book">
+        select * from book_info
+    </select>
+
+    <select id="queryBook" resultType="com.library.bean.Book" parameterType="String">
+        select * from book_info where name like #{search}
+        or author like #{search}
+    </select>
+    <select id="matchBook" resultType="int" parameterType="String">
+        select count(*) from book_info where name like #{search}
+        or author like #{search} or introduction like #{search}
+    </select>
+
+
+    <!--<select id="getBook" resultType="com.library.bean.Book" parameterType="long">-->
+        <!--select * from book_info where book_id = #{book_id}-->
+    <!--</select>-->
+    <select id="getBook" resultMap="book_detail" parameterType="long">
+        select
+            book_id,
+            name,
+            author,
+            publish,
+            ISBN,
+            introduction,
+            language,
+            price,
+            pub_date,
+            class_name,
+            number
+        from book_info bi
+            join class_info ci ON bi.class_id = ci.class_id
+        where book_id = #{book_id}
+    </select>
+
+
+    <delete id="deleteBook" parameterType="long">
+        delete from book_info where book_id = #{book_id}
+    </delete>
+
+    <!--<select id="queryBook" resultType="com.library.bean.Book" parameterType="String">
+        select * from book_info where name like #{search}
+        or author like #{search}    or introduction like #{search}
+    </select>-->
+    <select id="selectAllClass" resultType="com.library.bean.ClassInfo">
+        select * from class_info;
+    </select>
+</mapper>
