@@ -1,9 +1,9 @@
 # library_v1
-这是一个基于SSM+jsp的图书馆管理系统
+这是一个基于SSM+jsp实现的图书馆管理系统
 
 ## 功能分类
   
-  #### 管理员：
+  ### 管理员：
 
 1. 对图书管理
 
@@ -28,8 +28,14 @@
    c)    删除读者信息
 
 3. 同时对自己的密码进行修改
+#### 管理员模块截图：
+![admin (1).png](https://github.com/lgwayne/library_v1/blob/master/pic/admin%20(1).png?raw=true)
 
-#### 读者：
+![admin (2).png](https://github.com/lgwayne/library_v1/blob/master/pic/admin%20(2).png?raw=true)
+
+![admin (3).png](https://github.com/lgwayne/library_v1/blob/master/pic/admin%20(3).png?raw=true)
+
+### 读者：
 
 1.可查找所有图书
 
@@ -42,3 +48,10 @@
 5. 查看自己个人借还记录
 
 6. 对自己的密码进行修改
+
+#### 读者模块截图
+![reader (1).png](https://github.com/lgwayne/library_v1/blob/master/pic/reader%20(1).png?raw=true)
+
+![reader (2).png](https://github.com/lgwayne/library_v1/blob/master/pic/reader%20(2).png?raw=true)
+
+![reader (3).png](https://github.com/lgwayne/library_v1/blob/master/pic/reader%20(3).png?raw=true)
